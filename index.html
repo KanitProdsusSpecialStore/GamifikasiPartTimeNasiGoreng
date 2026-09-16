@@ -3,1164 +3,930 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Yummy Choice Cyber-Chef Academy</title>
+    <title>Yummy Choice SOP Simulator - Indomaret Point</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --neon-blue: #00f3ff;
-            --neon-pink: #ff00ff;
-            --neon-green: #39ff14;
-            --dark-bg: #0b0c10;
-            --panel-bg: rgba(11, 12, 16, 0.85);
-            --text-glow: 0 0 10px rgba(0, 243, 255, 0.5);
+            --brand-primary: #0284c7;
+            --brand-secondary: #0d9488;
+            --brand-accent: #f59e0b;
+            --bg-dark: #0f172a;
+            --panel-bg: rgba(30, 41, 59, 0.7);
         }
 
         body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--dark-bg);
-            color: #fff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: #f8fafc;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 85% 30%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 15% 15%, rgba(14, 165, 233, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(20, 184, 166, 0.08) 0%, transparent 40%);
             background-attachment: fixed;
+            user-select: none;
         }
 
-        h1, h2, h3, .cyber-font {
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .heading-font {
+            font-family: 'Outfit', sans-serif;
         }
 
-        .neon-text-blue { color: var(--neon-blue); text-shadow: var(--text-glow); }
-        .neon-text-pink { color: var(--neon-pink); text-shadow: 0 0 10px rgba(255, 0, 255, 0.5); }
-        
-        .glass-panel {
-            background: var(--panel-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
-            border-radius: 12px;
+        .clean-card {
+            background: rgba(30, 41, 59, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+            border-radius: 1rem;
         }
 
-        .cyber-btn {
-            background: transparent;
-            color: var(--neon-blue);
-            border: 2px solid var(--neon-blue);
-            padding: 10px 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border-radius: 4px;
+        .clean-btn {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: #ffffff;
+            font-weight: 600;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
         }
 
-        .cyber-btn:hover {
-            background: var(--neon-blue);
-            color: var(--dark-bg);
-            box-shadow: 0 0 15px var(--neon-blue);
+        .clean-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
+            filter: brightness(1.1);
         }
 
-        .cyber-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.4s ease;
+        .clean-btn:active:not(:disabled) {
+            transform: translateY(0);
         }
 
-        .cyber-btn:hover::before { left: 100%; }
-
-        .cyber-btn:disabled {
-            border-color: #555;
-            color: #555;
+        .clean-btn:disabled {
+            background: #334155;
+            color: #64748b;
             cursor: not-allowed;
-            background: transparent;
             box-shadow: none;
         }
 
-        /* Drag and Drop Styles */
-        .drop-zone {
-            display: inline-block;
-            min-width: 120px;
-            height: 30px;
-            border-bottom: 2px dashed var(--neon-blue);
-            background: rgba(0, 243, 255, 0.05);
-            vertical-align: middle;
-            margin: 0 5px;
-            text-align: center;
-            line-height: 30px;
-            color: var(--neon-blue);
-            font-weight: 600;
-            transition: all 0.2s;
-            border-radius: 4px;
+        .option-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
         }
 
-        .drop-zone.drag-over {
-            background: rgba(0, 243, 255, 0.2);
-            border-bottom-style: solid;
-            box-shadow: 0 0 10px var(--neon-blue) inset;
+        .option-card:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            background: rgba(15, 23, 42, 0.8);
         }
 
-        .drop-zone.filled {
-            border: 1px solid var(--neon-blue);
-            background: rgba(0, 243, 255, 0.1);
-        }
-        
-        .drop-zone.correct {
-            border-color: var(--neon-green);
-            color: var(--neon-green);
-            background: rgba(57, 255, 20, 0.1);
-            text-shadow: 0 0 5px var(--neon-green);
+        .option-card.selected {
+            border-color: #38bdf8;
+            background: rgba(14, 165, 233, 0.15);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
         }
 
-        .drop-zone.wrong {
-            border-color: var(--neon-pink);
-            color: var(--neon-pink);
-            background: rgba(255, 0, 255, 0.1);
-            text-shadow: 0 0 5px var(--neon-pink);
+        /* Animated Steam for Nasi Goreng Visual */
+        @keyframes steam {
+            0% { transform: translateY(0) scaleX(1); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-15px) scaleX(1.3); opacity: 0; }
         }
 
-        .draggable-item {
-            background: rgba(30, 40, 50, 0.8);
-            border: 1px solid #444;
-            padding: 8px 12px;
-            margin: 5px;
-            border-radius: 4px;
-            cursor: grab;
-            display: inline-block;
-            transition: transform 0.1s, box-shadow 0.2s;
-            font-weight: 600;
-            user-select: none;
-            touch-action: none; /* Important for touch drag */
+        .steam-line {
+            animation: steam 2s infinite ease-out;
+        }
+        .steam-line-delay {
+            animation: steam 2.3s infinite ease-out 0.6s;
         }
 
-        .draggable-item:hover {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
-        }
-
-        .draggable-item:active, .draggable-item.dragging {
-            cursor: grabbing;
-            transform: scale(1.05);
-            background: rgba(0, 243, 255, 0.2);
-            border-color: var(--neon-blue);
-            opacity: 0.8;
-            z-index: 100;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            height: 10px;
-            background: #222;
-            border-radius: 5px;
-            overflow: hidden;
-            border: 1px solid #444;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-            width: 0%;
-            transition: width 0.5s ease-out;
-            box-shadow: 0 0 10px var(--neon-blue);
-        }
-
-        /* Glitch Effect */
-        .glitch {
-            position: relative;
-        }
-        .glitch::before, .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--dark-bg);
-        }
-        .glitch::before {
-            left: 2px;
-            text-shadow: -1px 0 red;
-            clip: rect(24px, 550px, 90px, 0);
-            animation: glitch-anim-2 3s infinite linear alternate-reverse;
-        }
-        .glitch::after {
-            left: -2px;
-            text-shadow: -1px 0 blue;
-            clip: rect(85px, 550px, 140px, 0);
-            animation: glitch-anim 2.5s infinite linear alternate-reverse;
-        }
-
-        @keyframes glitch-anim {
-            0% { clip: rect(79px, 9999px, 86px, 0); }
-            20% { clip: rect(29px, 9999px, 16px, 0); }
-            40% { clip: rect(66px, 9999px, 3px, 0); }
-            60% { clip: rect(73px, 9999px, 51px, 0); }
-            80% { clip: rect(11px, 9999px, 76px, 0); }
-            100% { clip: rect(62px, 9999px, 8px, 0); }
-        }
-        @keyframes glitch-anim-2 {
-            0% { clip: rect(65px, 9999px, 100px, 0); }
-            20% { clip: rect(10px, 9999px, 60px, 0); }
-            40% { clip: rect(50px, 9999px, 20px, 0); }
-            60% { clip: rect(90px, 9999px, 40px, 0); }
-            80% { clip: rect(30px, 9999px, 80px, 0); }
-            100% { clip: rect(80px, 9999px, 10px, 0); }
-        }
-
-        /* Screen Transitions */
+        /* Screens */
         .screen {
             display: none;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
         }
         .screen.active {
             display: flex;
             opacity: 1;
         }
 
-        /* Badges */
-        .badge {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #222;
-            border: 2px solid #555;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #555;
-            transition: all 0.3s;
-            position: relative;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-        .badge.earned {
-            border-color: var(--neon-blue);
-            color: var(--neon-blue);
-            box-shadow: 0 0 15px var(--neon-blue);
-            background: rgba(0, 243, 255, 0.1);
-            animation: pulse-badge 2s infinite;
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
         }
-        .badge-tooltip {
-            position: absolute;
-            bottom: -30px;
-            font-size: 0.7rem;
-            white-space: nowrap;
-            background: rgba(0,0,0,0.8);
-            padding: 2px 6px;
-            border-radius: 4px;
-            opacity: 0;
-            transition: opacity 0.2s;
-            pointer-events: none;
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
         }
-        .badge:hover .badge-tooltip { opacity: 1; }
-
-        @keyframes pulse-badge {
-            0% { box-shadow: 0 0 5px var(--neon-blue); }
-            50% { box-shadow: 0 0 20px var(--neon-blue); }
-            100% { box-shadow: 0 0 5px var(--neon-blue); }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0284c7;
         }
 
-        /* Toast Notification */
+        /* Toast Popup */
         #toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--panel-bg);
-            border-left: 4px solid var(--neon-blue);
-            padding: 15px 20px;
-            border-radius: 4px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            transform: translateX(120%);
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+            transform: translateX(150%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #toast.show { transform: translateX(0); }
-
-        .sentence-block {
-            background: rgba(255,255,255,0.03);
-            border-left: 3px solid var(--neon-blue);
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 0 8px 8px 0;
-            line-height: 1.8;
+        #toast.show {
+            transform: translateX(0);
         }
-        
-        /* Mobile adjustments for drag area */
-        #word-bank {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            padding: 15px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 8px;
-            border: 1px solid rgba(0,243,255,0.2);
-            min-height: 100px;
-            margin-bottom: 20px;
-        }
-
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col justify-between">
 
-    <!-- Global Header -->
-    <header class="fixed top-0 w-full z-50 glass-panel border-t-0 border-l-0 border-r-0 rounded-none px-4 py-3 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <i class="fa-solid fa-microchip text-xl neon-text-blue"></i>
-            <h1 class="text-sm md:text-lg font-bold hidden sm:block">Yummy Choice <span class="neon-text-blue">Cyber-Chef</span></h1>
-        </div>
-        <div class="flex items-center gap-4">
-            <div id="player-info-display" class="hidden text-xs md:text-sm text-gray-300">
-                Agent: <span id="display-name" class="text-white font-bold"></span>
+    <header class="fixed top-0 w-full z-50 clean-card rounded-none border-t-0 border-l-0 border-r-0 px-6 py-3.5 flex justify-between items-center bg-slate-900/90 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
+                <i class="fa-solid fa-utensils text-lg"></i>
             </div>
-            <button id="audio-toggle" class="text-gray-400 hover:text-white transition-colors" title="Toggle Audio">
-                <i class="fa-solid fa-volume-xmark text-xl"></i>
+            <div>
+                <h1 class="text-base font-bold heading-font tracking-tight text-white flex items-center gap-2">
+                    YUMMY CHOICE <span class="text-xs px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/30">SOP SIMULATOR</span>
+                </h1>
+                <p class="text-[11px] text-slate-400">Indomaret Point Kitchen Academy</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <div id="player-hud" class="hidden flex items-center gap-3 text-xs">
+                <div class="bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                    <i class="fa-solid fa-id-badge text-sky-400"></i>
+                    <span id="hud-name" class="font-semibold text-slate-200">AGENT</span>
+                </div>
+                <div class="bg-slate-800/80 border border-amber-500/30 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                    <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                    <span class="text-slate-400 text-[11px]">XP:</span>
+                    <span id="hud-score" class="font-bold text-amber-400">0</span>
+                </div>
+            </div>
+            <button id="audio-btn" class="w-9 h-9 rounded-lg bg-slate-800/80 border border-slate-700/60 text-slate-400 hover:text-white transition-colors flex items-center justify-center" title="Toggle Audio BGM / SFX">
+                <i class="fa-solid fa-volume-xmark"></i>
             </button>
         </div>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="flex-grow flex flex-col justify-center items-center p-4 pt-20 pb-16 w-full max-w-4xl mx-auto">
-        
-        <!-- SCREEN 1: LOGIN & BRIEFING -->
+    <main class="flex-grow flex flex-col justify-center items-center px-4 pt-24 pb-12 w-full max-w-4xl mx-auto">
+
+        <!-- SCREEN 1: BRIEFING & ENTRY -->
         <section id="screen-login" class="screen active flex-col w-full max-w-lg">
-            <div class="glass-panel p-8 text-center relative overflow-hidden">
-                <!-- Decorative tech lines -->
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50"></div>
-                <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-pink-500 to-transparent opacity-50"></div>
+            <div class="clean-card p-6 md:p-8 text-center relative overflow-hidden">
                 
-                <h1 class="text-3xl md:text-4xl mb-2 glitch cyber-font neon-text-blue" data-text="SYSTEM INITIATION">SYSTEM INITIATION</h1>
-                <p class="text-gray-400 mb-6 text-sm">Indomaret Point - Nasi Goreng Protocol v2.0</p>
-                
-                <div class="mb-6 text-left bg-black bg-opacity-50 p-4 rounded border border-gray-700">
-                    <h3 class="neon-text-pink text-lg mb-2"><i class="fa-solid fa-crosshairs mr-2"></i>MISSION OBJECTIVE</h3>
-                    <p class="text-sm text-gray-300 mb-3">
-                        Selamat datang, Calon Cyber-Chef. Misi Anda adalah memulihkan kembali standar operasional prosedur (SOP) penyajian Yummy Choice Nasi Goreng yang datanya sempat korup akibat <i>Cyber Attack</i>.
+                <!-- NASI GORENG ILLUSTRATION VECTOR -->
+                <div class="relative w-36 h-36 mx-auto mb-4 flex items-center justify-center">
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl">
+                        <!-- Bowl shadow -->
+                        <ellipse cx="100" cy="165" rx="75" ry="15" fill="rgba(0,0,0,0.4)" />
+                        <!-- Bowl outer -->
+                        <path d="M 30,100 Q 30,160 100,160 Q 170,160 170,100 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="4"/>
+                        <!-- Bowl inner rim -->
+                        <ellipse cx="100" cy="100" rx="70" ry="25" fill="#334155" />
+                        <!-- Nasi Goreng Rice Base -->
+                        <ellipse cx="100" cy="98" rx="66" ry="22" fill="#d97706" />
+                        <ellipse cx="100" cy="95" rx="62" ry="19" fill="#f59e0b" />
+                        <!-- Rice grains texture -->
+                        <circle cx="70" cy="92" r="2" fill="#fbbf24"/>
+                        <circle cx="85" cy="98" r="2.5" fill="#d97706"/>
+                        <circle cx="115" cy="94" r="2" fill="#fbbf24"/>
+                        <circle cx="130" cy="90" r="2" fill="#b45309"/>
+                        <circle cx="95" cy="104" r="2" fill="#fbbf24"/>
+                        <!-- Fried Egg (Sunny Side Up) -->
+                        <ellipse cx="90" cy="92" rx="22" ry="14" fill="#f8fafc" />
+                        <ellipse cx="88" cy="91" rx="10" ry="7" fill="#f59e0b" />
+                        <ellipse cx="86" cy="89" rx="8" ry="5" fill="#fbbf24" />
+                        <!-- Green Peas / Garnish -->
+                        <circle cx="125" cy="96" r="3.5" fill="#22c55e" />
+                        <circle cx="138" cy="98" r="3" fill="#16a34a" />
+                        <circle cx="70" cy="98" r="3" fill="#22c55e" />
+                        <circle cx="110" cy="104" r="3" fill="#16a34a" />
+                        <!-- Chilli slice -->
+                        <path d="M 145,88 Q 150,85 148,93 Z" fill="#ef4444" />
+                        <!-- Cucumber slices -->
+                        <ellipse cx="45" cy="102" rx="8" ry="14" transform="rotate(-20 45 102)" fill="#4ade80" stroke="#16a34a" stroke-width="2"/>
+                        <!-- Steam Vapors -->
+                        <path class="steam-line" d="M 80,70 Q 75,55 85,40" fill="none" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round"/>
+                        <path class="steam-line-delay" d="M 110,70 Q 120,55 110,38" fill="none" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <h2 class="text-2xl font-bold heading-font text-white mb-1">NASI GORENG HONGKONG</h2>
+                <p class="text-xs text-sky-400 font-semibold mb-5">Simulasi Standar Operasional Dapur & Customer Pitching</p>
+
+                <!-- HOOK (WHY) -->
+                <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700/60 text-left text-xs text-slate-300 mb-6 space-y-2">
+                    <div class="font-bold text-sky-400 flex items-center gap-2 text-xs uppercase tracking-wider">
+                        <i class="fa-solid fa-lightbulb text-amber-400"></i> MENGAPA SIMULASI INI PENTING?
+                    </div>
+                    <p class="text-slate-300 leading-relaxed text-[12.5px]">
+                        Konsistensi kelezatan, higiene thawing, dan teknik penyajian Nasi Goreng Ayam Ala Hongkong adalah kunci utama kepuasan pelanggan Indomaret Point. Kuasai 4 Stasiun SOP untuk memberikan pelayanan terbaik!
                     </p>
-                    <p class="text-sm text-gray-300 font-bold mb-1">RULES OF ENGAGEMENT:</p>
-                    <ul class="text-xs text-gray-400 list-disc pl-5 space-y-1">
-                        <li>Seret (Drag) fragmen data (kata) yang tepat ke sektor yang kosong (kotak) pada protokol SOP.</li>
-                        <li>Jawaban Benar = +10 XP. Jawaban Salah = -5 XP.</li>
-                        <li>Selesaikan sekuens untuk mendapatkan sertifikasi dan badge spesialis.</li>
-                        <li>Pastikan modul audio aktif untuk pengalaman sinkronisasi neural yang maksimal.</li>
-                    </ul>
                 </div>
 
-                <div class="space-y-4">
-                    <div class="relative">
-                        <i class="fa-solid fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="text" id="input-name" placeholder="NAMA OPERATOR" class="w-full bg-gray-900 border border-gray-700 text-white rounded p-3 pl-10 focus:border-blue-500 focus:outline-none transition-colors cyber-font text-sm uppercase">
+                <!-- FORM INPUT NAMA & NIK -->
+                <div class="space-y-3.5 mb-6">
+                    <div>
+                        <label class="block text-left text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">Nama Lengkap Operator</label>
+                        <input type="text" id="input-name" placeholder="Masukkan Nama Anda" class="w-full bg-slate-900/90 border border-slate-700 text-white rounded-lg px-4 py-3 text-sm focus:border-sky-500 focus:outline-none transition-colors">
                     </div>
-                    <div class="relative">
-                        <i class="fa-solid fa-id-card absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="text" id="input-nik" placeholder="N.I.K / ID NUMBER" class="w-full bg-gray-900 border border-gray-700 text-white rounded p-3 pl-10 focus:border-blue-500 focus:outline-none transition-colors cyber-font text-sm">
+                    <div>
+                        <label class="block text-left text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">N.I.K / ID Karyawan</label>
+                        <input type="text" id="input-nik" placeholder="Masukkan NIK Karyawan" class="w-full bg-slate-900/90 border border-slate-700 text-white rounded-lg px-4 py-3 text-sm focus:border-sky-500 focus:outline-none transition-colors">
                     </div>
-                    
-                    <button id="btn-start" class="cyber-btn w-full mt-4 py-4 text-lg">
-                        <i class="fa-solid fa-power-off mr-2"></i> INITIATE LINK
-                    </button>
-                    <p id="login-error" class="text-red-500 text-xs mt-2 hidden">Error: Identitas tidak boleh kosong.</p>
                 </div>
+
+                <button id="btn-start-game" class="clean-btn w-full py-3.5 rounded-lg text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-play text-xs"></i> MULAI SIMULATOR
+                </button>
             </div>
         </section>
 
-        <!-- SCREEN 2: CORE GAMEPLAY -->
-        <section id="screen-game" class="screen flex-col w-full">
+        <section id="screen-game" class="screen flex-col w-full space-y-5">
             
-            <!-- HUD (Heads Up Display) -->
-            <div class="glass-panel p-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="flex-1 w-full">
-                    <div class="flex justify-between text-xs mb-1 font-bold text-gray-300">
-                        <span>DATA RESTORATION PROGRESS</span>
-                        <span id="progress-text">0%</span>
+            <!-- PROGRESS BAR & STAGE TRACKER HUD -->
+            <div class="clean-card p-4">
+                <div class="flex justify-between items-center text-xs mb-3">
+                    <div class="flex items-center gap-2 font-bold text-slate-200">
+                        <i class="fa-solid fa-[#0284c7] fa-list-check text-sky-400"></i>
+                        <span>PROGRESS SOP:</span>
+                        <span id="progress-percentage" class="text-sky-400 font-extrabold">25%</span>
                     </div>
-                    <div class="progress-container">
-                        <div id="progress-bar" class="progress-fill"></div>
+                    <div class="text-right">
+                        <span class="text-slate-400 text-[11px]">ORDER BATCH:</span>
+                        <span id="order-batch-label" class="font-bold text-amber-400 block">1 BOX NASI GORENG</span>
                     </div>
                 </div>
-                
-                <div class="flex items-center gap-6">
-                    <div class="text-center">
-                        <div class="text-[10px] text-gray-400 cyber-font">SCORE (XP)</div>
-                        <div id="score-display" class="text-2xl font-bold neon-text-blue">0</div>
-                    </div>
-                    
-                    <!-- Badges -->
-                    <div class="flex gap-2">
-                        <div id="badge-1" class="badge" title="Trainee">
-                            <i class="fa-solid fa-seedling"></i>
-                            <span class="badge-tooltip">SOP Beginner (3 correct)</span>
-                        </div>
-                        <div id="badge-2" class="badge" title="Specialist">
-                            <i class="fa-solid fa-fire-burner"></i>
-                            <span class="badge-tooltip">Wok Master (7 correct)</span>
-                        </div>
-                        <div id="badge-3" class="badge" title="Master">
-                            <i class="fa-solid fa-medal"></i>
-                            <span class="badge-tooltip">Cyber Chef (All correct)</span>
-                        </div>
-                    </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden mb-4 border border-slate-700/50">
+                    <div id="progress-bar-fill" class="bg-gradient-to-r from-sky-500 to-teal-400 h-full w-1/4 transition-all duration-300"></div>
+                </div>
+
+                <!-- Stage Badges -->
+                <div class="grid grid-cols-4 gap-2 text-[11px] font-semibold text-center">
+                    <div id="step-tag-1" class="py-1.5 px-2 rounded-lg bg-sky-500/20 border border-sky-400 text-sky-300">1. THAWING</div>
+                    <div id="step-tag-2" class="py-1.5 px-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-500">2. OSENG WOK</div>
+                    <div id="step-tag-3" class="py-1.5 px-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-500">3. TESTER PREP</div>
+                    <div id="step-tag-4" class="py-1.5 px-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-500">4. PITCHING</div>
                 </div>
             </div>
 
-            <!-- Game Arena -->
-            <div class="glass-panel p-4 md:p-8 flex flex-col lg:flex-row gap-6 relative">
-                
-                <!-- Questions / Sentences -->
-                <div class="flex-1 order-2 lg:order-1 text-sm md:text-base">
-                    <h2 class="cyber-font text-xl mb-4 border-b border-gray-700 pb-2"><i class="fa-solid fa-terminal mr-2"></i>PROTOCOL: YUMMY_CHOICE_NASI_GORENG.txt</h2>
-                    
-                    <!-- Questions will be injected here by JS -->
-                    <div id="sentences-container"></div>
-                </div>
-
-                <!-- Word Bank / Draggable Items -->
-                <div class="w-full lg:w-1/3 order-1 lg:order-2">
-                    <div class="sticky top-20">
-                        <h3 class="cyber-font text-lg mb-2 text-center text-gray-400"><i class="fa-solid fa-database mr-2"></i>DATA FRAGMENTS</h3>
-                        <p class="text-xs text-center text-gray-500 mb-4">(Drag & Drop into correct slots)</p>
-                        
-                        <!-- Words will be injected here -->
-                        <div id="word-bank"></div>
-                        
-                        <div class="mt-6 text-center">
-                            <button id="btn-submit" class="cyber-btn w-full hidden">
-                                SUBMIT PROTOCOL <i class="fa-solid fa-upload ml-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <!-- DYNAMIC STATION CONTAINER -->
+            <div id="station-container" class="clean-card p-6 md:p-8 min-h-[420px] flex flex-col justify-center items-center relative overflow-hidden">
+                <!-- Injected via JavaScript -->
             </div>
+
         </section>
 
-        <!-- SCREEN 3: DEBRIEF / RESULTS -->
-        <section id="screen-result" class="screen flex-col w-full max-w-2xl">
-            <div class="glass-panel p-8 text-center">
-                <div id="result-icon" class="text-6xl mb-4"></div>
-                <h1 id="result-title" class="text-3xl md:text-4xl mb-2 cyber-font">MISSION COMPLETED</h1>
-                <p id="result-subtitle" class="text-gray-400 mb-8">Simulation terminated.</p>
+        <section id="screen-result" class="screen flex-col w-full max-w-xl">
+            <div class="clean-card p-6 md:p-8 text-center relative">
+                
+                <div id="result-icon-box" class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-sky-500/10 border border-sky-400/30 flex items-center justify-center text-4xl text-amber-400 shadow-inner">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                
+                <h2 id="result-title" class="text-2xl font-bold heading-font text-white mb-1">EVALUASI SIMULASI SOP</h2>
+                <p id="result-subtitle" class="text-xs text-slate-400 mb-6">Laporan Kinerja Operasional Dapur & Komunikasi Pelanggan</p>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    <div class="bg-gray-900 p-4 rounded border border-gray-700">
-                        <div class="text-xs text-gray-500 cyber-font">FINAL XP</div>
-                        <div id="final-score" class="text-3xl font-bold neon-text-blue">0</div>
+                <!-- STATS GRID -->
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800">
+                        <div class="text-[10px] text-slate-400 font-semibold uppercase">TOTAL XP</div>
+                        <div id="res-score" class="text-2xl font-extrabold text-amber-400 mt-0.5">0</div>
                     </div>
-                    <div class="bg-gray-900 p-4 rounded border border-gray-700">
-                        <div class="text-xs text-gray-500 cyber-font">ACCURACY</div>
-                        <div id="final-accuracy" class="text-3xl font-bold text-white">0%</div>
+                    <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800">
+                        <div class="text-[10px] text-slate-400 font-semibold uppercase">AKURASI SOP</div>
+                        <div id="res-accuracy" class="text-2xl font-extrabold text-white mt-0.5">0%</div>
                     </div>
-                    <div class="bg-gray-900 p-4 rounded border border-gray-700">
-                        <div class="text-xs text-gray-500 cyber-font">BADGES EARNED</div>
-                        <div id="final-badges" class="text-3xl font-bold neon-text-pink">0/3</div>
+                    <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800">
+                        <div class="text-[10px] text-slate-400 font-semibold uppercase">PREDIKAT</div>
+                        <div id="res-rank" class="text-xs font-bold text-emerald-400 mt-2 truncate">CYBER CHEF</div>
                     </div>
                 </div>
 
-                <div id="feedback-message" class="bg-black bg-opacity-50 p-4 rounded border border-gray-700 text-sm text-left mb-8 h-40 overflow-y-auto">
-                    <!-- Detailed feedback injected here -->
+                <!-- FEEDBACK & POSITIVE REINFORCEMENT LOGS -->
+                <div id="res-feedback-list" class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 text-left text-xs space-y-2 mb-6 max-h-52 overflow-y-auto">
+                    <!-- Feedback injected dynamically -->
                 </div>
 
-                <button id="btn-restart" class="cyber-btn">
-                    <i class="fa-solid fa-rotate-right mr-2"></i> REBOOT SIMULATION
+                <button id="btn-restart" class="clean-btn w-full py-3.5 rounded-lg text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-right text-xs"></i> SIMULASI ULANG
                 </button>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="fixed bottom-0 w-full text-center py-2 text-[10px] text-gray-600 bg-black bg-opacity-80 z-40">
-        Education & Training Dept. © 2026 | Indomaret Point
+    <footer class="w-full text-center py-4 text-xs text-slate-500 bg-slate-950/80 border-t border-slate-800/60">
+        Education & Training Dept. © 2026 | SOP Nasi Goreng Ayam Ala Hongkong
     </footer>
 
-    <!-- Toast Notification -->
-    <div id="toast">
-        <i id="toast-icon" class="fa-solid fa-info-circle text-xl"></i>
-        <div class="flex-col">
-            <div id="toast-title" class="font-bold text-sm">Notice</div>
-            <div id="toast-msg" class="text-xs text-gray-300">Message here</div>
+    <!-- Toast Notification Popup -->
+    <div id="toast" class="clean-card px-5 py-3.5 border-l-4 border-sky-400 flex items-center gap-3 bg-slate-900 shadow-2xl">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-sky-400 text-lg"></i>
+        <div>
+            <div id="toast-title" class="font-bold text-xs text-white">NOTIFIKASI</div>
+            <div id="toast-msg" class="text-xs text-slate-300">Pesan sistem</div>
         </div>
     </div>
 
     <script>
-        // --- GAME DATA BASED ON PROVIDED IMAGE ---
-        // Format: Text with {id} as placeholders for drop zones.
-        const gameData = {
-            sentences: [
-                {
-                    id: 1,
-                    text: "1. Cara melakukan oseng-oseng nasi goreng ayam ala hongkong, nasi goreng di display pada {drop1}, Lama thawing/pemanasan produk nasi goreng di {drop2} adalah 1,5 menit (1 pcs) dan 2,5 menit (2 pcs)."
-                },
-                {
-                    id: 2,
-                    text: "2. Nyalakan kompor dengan posisi {drop3} kemudian panaskan wajan bersih ukuran 34cm {drop4} diatas kompor selama {drop5}, lalu siapkan sutil/spatula stainless steel diatas wajan."
-                },
-                {
-                    id: 3,
-                    text: "3. waktu pemanasan/oseng-oseng nasi goreng di {drop6} portable adalah {drop7}, maksimal nasi goreng yang dipanaskan 2 box."
-                },
-                {
-                    id: 4,
-                    text: "4. Penawaran produk icip-icip nasi goreng dibagi menjadi {drop8} jika 2 box menjadi {drop9}."
-                },
-                {
-                    id: 5,
-                    text: "5. Cara melakukan penawaran: {drop10}, {drop11}, {drop12}, {drop13}, {drop14}, {drop15}, {drop16}."
-                }
-            ],
-            // Correct mapping mapping drop zone ID to the exact string answer
-            answers: {
-                "drop1": "Upright Freezer",
-                "drop2": "Microwave",
-                "drop3": "panas tinggi",
-                "drop4": "tanpa minyak goreng",
-                "drop5": "1 menit",
-                "drop6": "kompor gas",
-                "drop7": "2 menit",
-                "drop8": "8 cup",
-                "drop9": "16 cup",
-                "drop10": "Salam pembuka",
-                "drop11": "mohon maaf mengganggu waktunya",
-                "drop12": "kenalkan & tawarkan produk serta variannya",
-                "drop13": "tawarkan tester/icip-icip",
-                "drop14": "informasi promo yang sedang berlangsung",
-                "drop15": "arahkan pelanggan untuk transaksi di kasir",
-                "drop16": "ucapkan terimakasih"
-            }
-        };
-
-        // All distractors + correct answers for the word bank
-        // Using Set to ensure uniqueness, though the image seems to have duplicates/specific phrasing.
-        // I will use exactly what is in the answers object to ensure a 1:1 match for mechanics, 
-        // plus a few distractors from the image's right panel if needed, but mostly shuffling the answers.
-        const wordBankItems = [
-            "2 menit", "mohon maaf mengganggu waktunya", "5 menit", "papper bag", 
-            "1 menit", "16 cup", "ucapkan terimakasih", "tanpa minyak goreng", 
-            "Upright Freezer", "tawarkan tester/icip-icip", "4 bagian", "Salam pembuka", 
-            "kompor gas", "informasi promo yang sedang berlangsung", "Microwave", 
-            "panas tinggi", "8 cup", "kenalkan & tawarkan produk serta variannya", 
-            "arahkan pelanggan untuk transaksi di kasir"
-        ];
-
-        // --- STATE MANAGEMENT ---
-        let state = {
+        // --- GAME ENGINE & STATE MANAGEMENT ---
+        const state = {
             playerName: '',
             playerNIK: '',
             score: 0,
-            correctCount: 0,
-            totalQuestions: Object.keys(gameData.answers).length,
-            userAnswers: {}, // Maps dropZoneId -> word placed
+            batchSize: 1, // 1 box or 2 box (randomized per session)
+            currentStage: 1,
             audioEnabled: false,
-            badges: { 1: false, 2: false, 3: false }
+            sopErrors: [],
+            stageData: {
+                storageChoice: null,
+                thawingTime: null,
+                stoveHeat: null,
+                oilChoice: null,
+                preheatTime: null,
+                osengTime: null,
+                osengStirCount: 0,
+                testerCups: null,
+                pitchSequence: []
+            }
         };
 
-        // --- AUDIO SYSTEM (Procedural Web Audio API) ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
-        let bgmOscillator1, bgmOscillator2, bgmGain, filter;
-        let isPlayingBGM = false;
+        // Standard SOP Answers
+        const SOP = {
+            storage: 'Upright Freezer',
+            thawingTime: (batch) => batch === 1 ? 1.5 : 2.5,
+            stoveHeat: 'Panas Tinggi',
+            oil: 'Tanpa Minyak',
+            preheatTime: 1, // 1 min
+            osengTime: 2, // 2 min
+            maxOsengBatch: 2,
+            testerCups: (batch) => batch === 1 ? 8 : 16,
+            pitchSteps: [
+                "Salam pembuka",
+                "Mohon maaf mengganggu waktunya",
+                "Kenalkan & tawarkan produk serta variannya",
+                "Tawarkan tester/icip-icip",
+                "Informasi promo yang sedang berlangsung",
+                "Arahkan pelanggan untuk transaksi di kasir",
+                "Ucapkan terimakasih"
+            ]
+        };
 
+        // Web Audio API Sound System (Lightweight Synthesis)
+        let audioCtx;
         function initAudio() {
             if (!audioCtx) {
-                audioCtx = new AudioContext();
-                setupBGM();
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
         }
 
-        // Procedural Cyberpunk Ambient Loop
-        function setupBGM() {
-            bgmGain = audioCtx.createGain();
-            bgmGain.gain.value = 0; // Start muted
-            bgmGain.connect(audioCtx.destination);
-
-            filter = audioCtx.createBiquadFilter();
-            filter.type = "lowpass";
-            filter.frequency.value = 800;
-            filter.connect(bgmGain);
-
-            // Bass drone
-            bgmOscillator1 = audioCtx.createOscillator();
-            bgmOscillator1.type = 'sawtooth';
-            bgmOscillator1.frequency.value = 43.65; // F1
-            bgmOscillator1.connect(filter);
-
-            // Sub drone
-            bgmOscillator2 = audioCtx.createOscillator();
-            bgmOscillator2.type = 'sine';
-            bgmOscillator2.frequency.value = 21.83; // F0
-            bgmOscillator2.connect(filter);
-
-            bgmOscillator1.start();
-            bgmOscillator2.start();
-            
-            // Modulation loop
-            setInterval(() => {
-                if(isPlayingBGM && audioCtx.state === 'running') {
-                    const now = audioCtx.currentTime;
-                    filter.frequency.setTargetAtTime(400 + Math.random() * 600, now, 2);
-                }
-            }, 3000);
-        }
-
-        function toggleAudio() {
-            const icon = document.querySelector('#audio-toggle i');
-            state.audioEnabled = !state.audioEnabled;
-            
-            if (state.audioEnabled) {
-                initAudio();
-                icon.className = 'fa-solid fa-volume-high text-xl neon-text-blue';
-                bgmGain.gain.setTargetAtTime(0.08, audioCtx.currentTime, 0.5); // Low volume
-                isPlayingBGM = true;
-                playSFX('startup');
-            } else {
-                icon.className = 'fa-solid fa-volume-xmark text-xl text-gray-400';
-                if (bgmGain) bgmGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.5);
-                isPlayingBGM = false;
-            }
-        }
-
-        // Procedural Sound Effects
         function playSFX(type) {
-            if (!state.audioEnabled || !audioCtx) return;
+            if (!state.audioEnabled) return;
+            initAudio();
             const now = audioCtx.currentTime;
-            
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
             gain.connect(audioCtx.destination);
 
-            switch(type) {
-                case 'startup':
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(220, now);
-                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.3);
-                    gain.gain.setValueAtTime(0, now);
-                    gain.gain.linearRampToValueAtTime(0.1, now + 0.1);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-                    osc.start(now);
-                    osc.stop(now + 0.5);
-                    break;
-                case 'drag':
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(400, now);
-                    osc.frequency.exponentialRampToValueAtTime(200, now + 0.1);
-                    gain.gain.setValueAtTime(0.1, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                    osc.start(now);
-                    osc.stop(now + 0.1);
-                    break;
-                case 'correct':
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(600, now);
-                    osc.frequency.setValueAtTime(800, now + 0.1);
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                    osc.start(now);
-                    osc.stop(now + 0.3);
-                    break;
-                case 'wrong':
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(150, now);
-                    osc.frequency.exponentialRampToValueAtTime(100, now + 0.2);
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-                    osc.start(now);
-                    osc.stop(now + 0.2);
-                    break;
-                case 'badge':
-                    osc.type = 'square';
-                    // Arpeggio effect
-                    [440, 554.37, 659.25, 880].forEach((freq, i) => {
-                        osc.frequency.setValueAtTime(freq, now + (i * 0.1));
-                    });
-                    gain.gain.setValueAtTime(0.1, now);
-                    gain.gain.linearRampToValueAtTime(0, now + 0.6);
-                    osc.start(now);
-                    osc.stop(now + 0.6);
-                    break;
-                case 'win':
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(440, now);
-                    osc.frequency.exponentialRampToValueAtTime(880, now + 1);
-                    gain.gain.setValueAtTime(0, now);
-                    gain.gain.linearRampToValueAtTime(0.2, now + 0.5);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 1.5);
-                    osc.start(now);
-                    osc.stop(now + 1.5);
-                    break;
-                case 'lose':
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(300, now);
-                    osc.frequency.exponentialRampToValueAtTime(50, now + 1);
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 1);
-                    osc.start(now);
-                    osc.stop(now + 1);
-                    break;
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(450, now);
+                osc.frequency.exponentialRampToValueAtTime(750, now + 0.04);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+                osc.start(now); osc.stop(now + 0.04);
+            } else if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+                osc.start(now); osc.stop(now + 0.28);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.setValueAtTime(120, now + 0.08);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.start(now); osc.stop(now + 0.2);
+            } else if (type === 'sizzle') {
+                const bufferSize = audioCtx.sampleRate * 0.08;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1400;
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.gain.setValueAtTime(0.06, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+                noise.start(now);
             }
         }
 
-        // --- STREAMING_CHUNK:Building Game Logic (DOM Manipulation & Flow) ---
-        // DOM Elements
-        const screens = {
-            login: document.getElementById('screen-login'),
-            game: document.getElementById('screen-game'),
-            result: document.getElementById('screen-result')
-        };
-        
-        // Navigation Logic
-        function switchScreen(screenId) {
-            Object.values(screens).forEach(s => s.classList.remove('active'));
-            screens[screenId].classList.add('active');
-            window.scrollTo(0,0);
+        // Navigation & Toasts
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
         }
 
-        // Initialize Game
-        function initGameUI() {
-            // 1. Build Sentences with Drop Zones
-            const container = document.getElementById('sentences-container');
-            container.innerHTML = '';
-            
-            gameData.sentences.forEach(item => {
-                let htmlStr = item.text;
-                // Replace {dropX} with actual span elements
-                const regex = /\{([^}]+)\}/g;
-                htmlStr = htmlStr.replace(regex, (match, id) => {
-                    return `<span class="drop-zone" data-id="${id}" id="zone-${id}"></span>`;
-                });
-                
-                const block = document.createElement('div');
-                block.className = 'sentence-block';
-                block.innerHTML = htmlStr;
-                container.appendChild(block);
-            });
-
-            // 2. Build Word Bank (Shuffle it)
-            const wordBank = document.getElementById('word-bank');
-            wordBank.innerHTML = '';
-            const shuffledWords = [...wordBankItems].sort(() => Math.random() - 0.5);
-            
-            shuffledWords.forEach((word, index) => {
-                const item = document.createElement('div');
-                item.className = 'draggable-item';
-                item.draggable = true;
-                item.textContent = word;
-                item.id = `word-${index}`;
-                item.dataset.word = word;
-                wordBank.appendChild(item);
-            });
-
-            setupDragAndDrop();
-            updateHUD();
-        }
-
-        // --- STREAMING_CHUNK:Implementing Drag and Drop Mechanics (Mouse & Touch) ---
-        let draggedElement = null;
-        let sourceZone = null; // To handle moving between slots
-
-        function setupDragAndDrop() {
-            const draggables = document.querySelectorAll('.draggable-item');
-            const dropZones = document.querySelectorAll('.drop-zone');
-            const wordBank = document.getElementById('word-bank');
-
-            // --- Mouse Events ---
-            draggables.forEach(draggable => {
-                draggable.addEventListener('dragstart', (e) => {
-                    draggedElement = draggable;
-                    draggable.classList.add('dragging');
-                    playSFX('drag');
-                    
-                    // Check if it's coming from a drop zone
-                    sourceZone = draggable.parentElement.classList.contains('drop-zone') ? draggable.parentElement : null;
-                    
-                    // Required for Firefox
-                    e.dataTransfer.setData('text/plain', draggable.id);
-                    e.dataTransfer.effectAllowed = 'move';
-                });
-
-                draggable.addEventListener('dragend', () => {
-                    draggable.classList.remove('dragging');
-                    draggedElement = null;
-                    checkAllFilled();
-                });
-            });
-
-            dropZones.forEach(zone => {
-                zone.addEventListener('dragover', (e) => {
-                    e.preventDefault(); // Allow drop
-                    if (zone.children.length === 0 || zone === sourceZone) {
-                        zone.classList.add('drag-over');
-                    }
-                });
-
-                zone.addEventListener('dragleave', () => {
-                    zone.classList.remove('drag-over');
-                });
-
-                zone.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    zone.classList.remove('drag-over');
-                    
-                    // If zone already has a word, swap them or reject
-                    if (zone.children.length === 0 && draggedElement) {
-                        handleDrop(zone, draggedElement);
-                    }
-                });
-            });
-
-            // Allow dropping back to word bank
-            wordBank.addEventListener('dragover', e => e.preventDefault());
-            wordBank.addEventListener('drop', (e) => {
-                e.preventDefault();
-                if (draggedElement) {
-                    if (sourceZone) {
-                        sourceZone.classList.remove('filled');
-                        delete state.userAnswers[sourceZone.dataset.id];
-                        updateHUD(); // Recalculate score/progress immediately if removed
-                    }
-                    wordBank.appendChild(draggedElement);
-                }
-            });
-
-            // --- Touch Events (Mobile Support) ---
-            // Simple touch implementation: tap word, then tap zone
-            let selectedForTouch = null;
-
-            draggables.forEach(draggable => {
-                draggable.addEventListener('touchstart', (e) => {
-                    e.preventDefault(); // Prevent scroll while touching
-                    
-                    // Deselect previous
-                    if (selectedForTouch) {
-                        selectedForTouch.style.transform = 'scale(1)';
-                        selectedForTouch.style.borderColor = '#444';
-                    }
-
-                    if (selectedForTouch === draggable) {
-                        // Deselect if tapped again
-                        selectedForTouch = null;
-                        return;
-                    }
-
-                    selectedForTouch = draggable;
-                    draggable.style.transform = 'scale(1.1)';
-                    draggable.style.borderColor = 'var(--neon-pink)';
-                    playSFX('drag');
-                    showToast('Selected', `Tap an empty slot to place: "${draggable.textContent}"`, 'info');
-                }, {passive: false});
-            });
-
-            dropZones.forEach(zone => {
-                zone.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    if (selectedForTouch && zone.children.length === 0) {
-                        handleDrop(zone, selectedForTouch);
-                        
-                        // Reset touch selection
-                        selectedForTouch.style.transform = '';
-                        selectedForTouch.style.borderColor = '';
-                        selectedForTouch = null;
-                    } else if (zone.children.length > 0) {
-                        // Return item to bank on tap
-                        const item = zone.children[0];
-                        wordBank.appendChild(item);
-                        zone.classList.remove('filled');
-                        zone.classList.remove('correct', 'wrong'); // Clear colors
-                        delete state.userAnswers[zone.dataset.id];
-                        updateHUD();
-                        playSFX('drag');
-                    }
-                }, {passive: false});
-            });
-            
-             // Touch back to word bank
-            wordBank.addEventListener('touchstart', (e) => {
-                 if (e.target === wordBank && selectedForTouch) {
-                     e.preventDefault();
-                     wordBank.appendChild(selectedForTouch);
-                     if (selectedForTouch.parentElement.classList?.contains('drop-zone')) {
-                         const parentZone = selectedForTouch.parentElement;
-                         parentZone.classList.remove('filled', 'correct', 'wrong');
-                         delete state.userAnswers[parentZone.dataset.id];
-                         updateHUD();
-                     }
-                     selectedForTouch.style.transform = '';
-                     selectedForTouch.style.borderColor = '';
-                     selectedForTouch = null;
-                 }
-            });
-        }
-
-        // --- STREAMING_CHUNK:Core Game Logic & Evaluation ---
-        function handleDrop(zone, item) {
-            // If item came from another zone, clean up old zone
-            if (item.parentElement.classList.contains('drop-zone')) {
-                const oldZone = item.parentElement;
-                oldZone.classList.remove('filled');
-                oldZone.classList.remove('correct', 'wrong'); // Clear visual state if moving
-                delete state.userAnswers[oldZone.dataset.id];
-            }
-
-            zone.appendChild(item);
-            zone.classList.add('filled');
-            
-            // Record answer instantly for evaluation
-            const zoneId = zone.dataset.id;
-            const word = item.dataset.word;
-            state.userAnswers[zoneId] = word;
-            
-            // Immediate Feedback Mode (Gamification element)
-            evaluateSingleAnswer(zone, zoneId, word);
-
-            updateHUD();
-            checkAllFilled();
-        }
-
-        function evaluateSingleAnswer(zone, zoneId, userWord) {
-            const correctWord = gameData.answers[zoneId];
-            const isCorrect = (userWord === correctWord);
-
-            // Remove existing classes
-            zone.classList.remove('correct', 'wrong');
-
-            if (isCorrect) {
-                zone.classList.add('correct');
-                playSFX('correct');
-                showToast('+10 XP', 'Data match verified.', 'success');
-            } else {
-                zone.classList.add('wrong');
-                playSFX('wrong');
-                showToast('-5 XP', 'Data anomaly detected.', 'error');
-            }
-        }
-
-        function updateHUD() {
-            // Recalculate score based on current placed items
-            let currentScore = 0;
-            let currentCorrect = 0;
-            let placedCount = Object.keys(state.userAnswers).length;
-
-            for (const [zoneId, word] of Object.entries(state.userAnswers)) {
-                if (word === gameData.answers[zoneId]) {
-                    currentScore += 10;
-                    currentCorrect++;
-                } else {
-                    currentScore -= 5;
-                }
-            }
-
-            state.score = currentScore;
-            state.correctCount = currentCorrect;
-
-            // Update UI
-            document.getElementById('score-display').textContent = state.score;
-            
-            // Progress
-            const progressPct = Math.round((placedCount / state.totalQuestions) * 100);
-            document.getElementById('progress-bar').style.width = `${progressPct}%`;
-            document.getElementById('progress-text').textContent = `${progressPct}%`;
-
-            checkBadges();
-        }
-
-        function checkBadges() {
-            // Badge 1: 3 correct
-            if (state.correctCount >= 3 && !state.badges[1]) {
-                state.badges[1] = true;
-                document.getElementById('badge-1').classList.add('earned');
-                playSFX('badge');
-                showToast('Badge Earned!', 'SOP Beginner unlocked.', 'info');
-            }
-            // Badge 2: 7 correct
-            if (state.correctCount >= 7 && !state.badges[2]) {
-                state.badges[2] = true;
-                document.getElementById('badge-2').classList.add('earned');
-                playSFX('badge');
-                showToast('Badge Earned!', 'Wok Master unlocked.', 'info');
-            }
-            // Badge 3: All correct
-            if (state.correctCount === state.totalQuestions && !state.badges[3]) {
-                state.badges[3] = true;
-                document.getElementById('badge-3').classList.add('earned');
-                playSFX('badge');
-                showToast('Badge Earned!', 'Cyber Chef unlocked.', 'info');
-            }
-        }
-
-        function checkAllFilled() {
-            const placedCount = Object.keys(state.userAnswers).length;
-            const submitBtn = document.getElementById('btn-submit');
-            
-            if (placedCount === state.totalQuestions) {
-                submitBtn.classList.remove('hidden');
-                submitBtn.classList.add('animate-pulse');
-            } else {
-                submitBtn.classList.add('hidden');
-                submitBtn.classList.remove('animate-pulse');
-            }
-        }
-
-        // --- STREAMING_CHUNK:Finalizing Results and Utility Functions ---
-        function submitProtocol() {
-            // Calculate final state
-            const accuracy = Math.round((state.correctCount / state.totalQuestions) * 100);
-            const badgesEarned = Object.values(state.badges).filter(v => v).length;
-            
-            // Populate Result Screen
-            document.getElementById('final-score').textContent = state.score;
-            document.getElementById('final-accuracy').textContent = `${accuracy}%`;
-            document.getElementById('final-badges').textContent = `${badgesEarned}/3`;
-            
-            const titleEl = document.getElementById('result-title');
-            const subEl = document.getElementById('result-subtitle');
-            const iconEl = document.getElementById('result-icon');
-            const feedbackEl = document.getElementById('feedback-message');
-            
-            let feedbackHTML = '<h4 class="font-bold mb-2 border-b border-gray-600 pb-1">DEBRIEF LOG:</h4><ul class="space-y-2">';
-
-            // Generate detailed feedback
-            for (const [zoneId, correctWord] of Object.entries(gameData.answers)) {
-                const userWord = state.userAnswers[zoneId] || "TIDAK DIISI";
-                const isCorrect = userWord === correctWord;
-                
-                // Find the context sentence
-                let context = "";
-                gameData.sentences.forEach(s => {
-                    if (s.text.includes(`{${zoneId}}`)) {
-                        // Replace the placeholder with the correct word for context
-                        context = s.text.replace(/\{drop\d+\}/g, '...').substring(0, 50) + "...";
-                    }
-                });
-
-                if(isCorrect) {
-                    feedbackHTML += `<li><i class="fa-solid fa-check text-green-500 w-5"></i> <span class="text-gray-400 text-xs">Context: ${context}</span> <br/> <span class="text-green-400 font-bold">${userWord}</span> (Benar)</li>`;
-                } else {
-                    feedbackHTML += `<li><i class="fa-solid fa-xmark text-red-500 w-5"></i> <span class="text-gray-400 text-xs">Context: ${context}</span> <br/> <span class="line-through text-red-400">${userWord}</span> <i class="fa-solid fa-arrow-right mx-1 text-gray-600"></i> <span class="text-green-400 font-bold">${correctWord}</span></li>`;
-                }
-            }
-            feedbackHTML += '</ul>';
-            feedbackEl.innerHTML = feedbackHTML;
-
-            // Win/Lose condition formatting
-            if (accuracy >= 80) {
-                titleEl.textContent = "PROTOCOL RESTORED";
-                titleEl.className = "text-3xl md:text-4xl mb-2 cyber-font neon-text-blue";
-                subEl.textContent = "Kerja bagus, Agent. Prosedur Yummy Choice kembali normal.";
-                iconEl.innerHTML = '<i class="fa-solid fa-shield-check text-blue-500"></i>';
-                playSFX('win');
-            } else if (accuracy >= 50) {
-                titleEl.textContent = "PARTIAL RESTORATION";
-                titleEl.className = "text-3xl md:text-4xl mb-2 cyber-font text-yellow-500";
-                subEl.textContent = "SOP terpulihkan sebagian. Disarankan melakukan review modul.";
-                iconEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-yellow-500"></i>';
-                playSFX('lose'); // Mild fail
-            } else {
-                titleEl.textContent = "SYSTEM FAILURE";
-                titleEl.className = "text-3xl md:text-4xl mb-2 cyber-font neon-text-pink";
-                subEl.textContent = "Restorasi gagal. SOP Nasi Goreng masih terkorupsi.";
-                iconEl.innerHTML = '<i class="fa-solid fa-skull-crossbones text-red-500"></i>';
-                playSFX('lose');
-            }
-
-            switchScreen('result');
-        }
-
-        // Custom Toast Notification
-        let toastTimeout;
         function showToast(title, msg, type = 'info') {
             const toast = document.getElementById('toast');
-            const icon = document.getElementById('toast-icon');
-            
             document.getElementById('toast-title').textContent = title;
             document.getElementById('toast-msg').textContent = msg;
-
-            // Styling based on type
-            toast.style.borderLeftColor = type === 'success' ? 'var(--neon-green)' : (type === 'error' ? 'var(--neon-pink)' : 'var(--neon-blue)');
             
-            if(type === 'success') icon.className = 'fa-solid fa-circle-check text-xl text-green-400';
-            else if(type === 'error') icon.className = 'fa-solid fa-circle-xmark text-xl text-pink-500';
-            else icon.className = 'fa-solid fa-info-circle text-xl text-blue-400';
+            const icon = document.getElementById('toast-icon');
+            if (type === 'success') {
+                toast.style.borderColor = '#22c55e';
+                icon.className = 'fa-solid fa-circle-check text-emerald-400 text-lg';
+            } else if (type === 'error') {
+                toast.style.borderColor = '#f43f5e';
+                icon.className = 'fa-solid fa-triangle-exclamation text-rose-500 text-lg';
+            } else {
+                toast.style.borderColor = '#0284c7';
+                icon.className = 'fa-solid fa-circle-info text-sky-400 text-lg';
+            }
 
             toast.classList.add('show');
-            
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // --- EVENT LISTENERS ---
-        document.getElementById('btn-start').addEventListener('click', () => {
-            const nameInput = document.getElementById('input-name').value.trim();
-            const nikInput = document.getElementById('input-nik').value.trim();
-            const errorMsg = document.getElementById('login-error');
+        // Start Gameplay
+        function startGame() {
+            state.score = 0;
+            state.currentStage = 1;
+            state.sopErrors = [];
+            state.batchSize = Math.random() > 0.5 ? 2 : 1; // 1 box or 2 box random
+            
+            document.getElementById('hud-name').textContent = state.playerName;
+            document.getElementById('hud-score').textContent = '0';
+            document.getElementById('player-hud').classList.remove('hidden');
+            document.getElementById('order-batch-label').textContent = `${state.batchSize} BOX NASI GORENG`;
 
-            if (!nameInput || !nikInput) {
-                errorMsg.classList.remove('hidden');
+            showScreen('screen-game');
+            renderStage1();
+        }
+
+        // Update Tracker Progress UI
+        function updateStageTracker(stageNum) {
+            state.currentStage = stageNum;
+            const progressPct = (stageNum / 4) * 100;
+            document.getElementById('progress-percentage').textContent = `${progressPct}%`;
+            document.getElementById('progress-bar-fill').style.width = `${progressPct}%`;
+
+            for (let i = 1; i <= 4; i++) {
+                const tag = document.getElementById(`step-tag-${i}`);
+                if (i === stageNum) {
+                    tag.className = 'py-1.5 px-2 rounded-lg bg-sky-500/20 border border-sky-400 text-sky-300 font-bold';
+                } else if (i < stageNum) {
+                    tag.className = 'py-1.5 px-2 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold';
+                } else {
+                    tag.className = 'py-1.5 px-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-500 font-semibold';
+                }
+            }
+        }
+
+        function renderStage1() {
+            updateStageTracker(1);
+            const container = document.getElementById('station-container');
+
+            container.innerHTML = `
+                <div class="w-full max-w-xl text-center space-y-6">
+                    <div>
+                        <span class="text-xs font-bold text-sky-400 tracking-wider uppercase">STASIUN 1: STORAGE & THAWING</span>
+                        <h3 class="text-xl font-bold text-white mt-1">Penyimpanan & Defrosting Microwave</h3>
+                        <p class="text-xs text-slate-400">Order Batch: <b class="text-amber-400">${state.batchSize} Box Nasi Goreng</b>. Tentukan freezer & waktu pemanasan microwave.</p>
+                    </div>
+
+                    <!-- Step A: Storage Selection -->
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-left space-y-2">
+                        <label class="block text-xs text-slate-300 font-semibold">1. Tempat penyimpanan/display produk Nasi Goreng:</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="selectStorage('Chiller Room')" class="storage-opt option-card p-3 text-xs rounded-xl font-medium text-slate-200 text-center">Chiller Room</button>
+                            <button onclick="selectStorage('Upright Freezer')" class="storage-opt option-card p-3 text-xs rounded-xl font-medium text-slate-200 text-center">Upright Freezer</button>
+                            <button onclick="selectStorage('Ice Cream Cabinet')" class="storage-opt option-card p-3 text-xs rounded-xl font-medium text-slate-200 text-center">Ice Cream Cabinet</button>
+                        </div>
+                    </div>
+
+                    <!-- Step B: Microwave Timer -->
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-left space-y-2">
+                        <label class="block text-xs text-slate-300 font-semibold">2. Timer Microwave untuk Defrosting (${state.batchSize} Box):</label>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button onclick="selectThawTime(1.0)" class="thaw-opt option-card p-2.5 text-xs rounded-xl font-medium text-slate-200 text-center">1.0 Menit</button>
+                            <button onclick="selectThawTime(1.5)" class="thaw-opt option-card p-2.5 text-xs rounded-xl font-medium text-slate-200 text-center">1.5 Menit</button>
+                            <button onclick="selectThawTime(2.0)" class="thaw-opt option-card p-2.5 text-xs rounded-xl font-medium text-slate-200 text-center">2.0 Menit</button>
+                            <button onclick="selectThawTime(2.5)" class="thaw-opt option-card p-2.5 text-xs rounded-xl font-medium text-slate-200 text-center">2.5 Menit</button>
+                        </div>
+                    </div>
+
+                    <button id="btn-submit-stage1" onclick="submitStage1()" class="clean-btn w-full py-3 rounded-xl text-sm" disabled>
+                        LANJUT KE STASIUN OSENG WOK <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectStorage(val) {
+            playSFX('click');
+            state.stageData.storageChoice = val;
+            document.querySelectorAll('.storage-opt').forEach(btn => {
+                const isSelected = btn.textContent.trim() === val;
+                btn.classList.toggle('selected', isSelected);
+            });
+            checkStage1Ready();
+        }
+
+        function selectThawTime(val) {
+            playSFX('click');
+            state.stageData.thawingTime = val;
+            document.querySelectorAll('.thaw-opt').forEach(btn => {
+                const isSelected = btn.textContent.trim() === `${val.toFixed(1)} Menit`;
+                btn.classList.toggle('selected', isSelected);
+            });
+            checkStage1Ready();
+        }
+
+        function checkStage1Ready() {
+            if (state.stageData.storageChoice && state.stageData.thawingTime !== null) {
+                document.getElementById('btn-submit-stage1').disabled = false;
+            }
+        }
+
+        function submitStage1() {
+            const correctThaw = SOP.thawingTime(state.batchSize);
+            
+            if (state.stageData.storageChoice === SOP.storage) {
+                state.score += 20;
+            } else {
+                state.score -= 10;
+                state.sopErrors.push(`Penyimpanan freezer salah (${state.stageData.storageChoice}, seharusnya ${SOP.storage})`);
+            }
+
+            if (state.stageData.thawingTime === correctThaw) {
+                state.score += 20;
+            } else {
+                state.score -= 10;
+                state.sopErrors.push(`Timer thawing ${state.batchSize} box salah (${state.stageData.thawingTime} mnt, seharusnya ${correctThaw} mnt)`);
+            }
+
+            playSFX('correct');
+            document.getElementById('hud-score').textContent = state.score;
+            renderStage2();
+        }
+
+        function renderStage2() {
+            updateStageTracker(2);
+            const container = document.getElementById('station-container');
+
+            container.innerHTML = `
+                <div class="w-full max-w-xl text-center space-y-5">
+                    <div>
+                        <span class="text-xs font-bold text-sky-400 tracking-wider uppercase">STASIUN 2: OSENG WOK (34 CM)</span>
+                        <h3 class="text-xl font-bold text-white mt-1">Pengoperasian Kompor & Minigame Mengoseng</h3>
+                        <p class="text-xs text-slate-400">Atur parameter kompor gas, lalu lakukan aksi oseng wajan stainless steel!</p>
+                    </div>
+
+                    <!-- Config options -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                            <label class="block text-xs text-slate-300 font-semibold mb-1">1. Posisi Api Kompor Gas:</label>
+                            <select id="select-heat" onchange="playSFX('click')" class="w-full bg-slate-900 border border-slate-700 text-xs p-2.5 rounded-lg text-white focus:border-sky-500">
+                                <option value="">-- Pilih Posisi Api --</option>
+                                <option value="Panas Rendah">Panas Rendah</option>
+                                <option value="Panas Sedang">Panas Sedang</option>
+                                <option value="Panas Tinggi">Panas Tinggi</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                            <label class="block text-xs text-slate-300 font-semibold mb-1">2. Minyak Goreng:</label>
+                            <select id="select-oil" onchange="playSFX('click')" class="w-full bg-slate-900 border border-slate-700 text-xs p-2.5 rounded-lg text-white focus:border-sky-500">
+                                <option value="">-- Pilih Penggunaan Minyak --</option>
+                                <option value="Gunakan 1 SDM Minyak">Gunakan 1 SDM Minyak</option>
+                                <option value="Tanpa Minyak">Tanpa Minyak Goreng</option>
+                                <option value="Gunakan Margarin">Gunakan Margarin</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                            <label class="block text-xs text-slate-300 font-semibold mb-1">3. Durasi Preheat Wajan Kosong:</label>
+                            <select id="select-preheat" onchange="playSFX('click')" class="w-full bg-slate-900 border border-slate-700 text-xs p-2.5 rounded-lg text-white focus:border-sky-500">
+                                <option value="">-- Waktu Preheat --</option>
+                                <option value="0.5">0.5 Menit (30 detik)</option>
+                                <option value="1">1 Menit</option>
+                                <option value="2">2 Menit</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                            <label class="block text-xs text-slate-300 font-semibold mb-1">4. Durasi Oseng Nasi Goreng:</label>
+                            <select id="select-osengtime" onchange="playSFX('click')" class="w-full bg-slate-900 border border-slate-700 text-xs p-2.5 rounded-lg text-white focus:border-sky-500">
+                                <option value="">-- Waktu Oseng --</option>
+                                <option value="1">1 Menit</option>
+                                <option value="2">2 Menit</option>
+                                <option value="3">3 Menit</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- VISUAL INTERACTIVE SPATULA MINIGAME -->
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 flex flex-col items-center gap-3">
+                        <div class="text-xs text-slate-300 font-semibold">
+                            AKSI SPATULA OSENG: <span id="stir-count-label" class="text-amber-400 font-bold">0</span> / 10 KLIK
+                        </div>
+
+                        <button id="btn-stir" onclick="stirAction()" class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 to-amber-600 border-4 border-amber-300/40 shadow-lg flex items-center justify-center text-2xl text-white active:scale-90 transition-transform">
+                            <i class="fa-solid fa-fire-burner"></i>
+                        </button>
+
+                        <p class="text-[11px] text-slate-400">Klik / Ketuk tombol spatula di atas 10x untuk meratakan panas Nasi Goreng!</p>
+                    </div>
+
+                    <button id="btn-submit-stage2" onclick="submitStage2()" class="clean-btn w-full py-3 rounded-xl text-sm" disabled>
+                        SELESAIKAN OSENG & LANJUT <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                    </button>
+                </div>
+            `;
+            state.stageData.osengStirCount = 0;
+        }
+
+        function stirAction() {
+            playSFX('sizzle');
+            state.stageData.osengStirCount++;
+            document.getElementById('stir-count-label').textContent = state.stageData.osengStirCount;
+
+            if (state.stageData.osengStirCount >= 10) {
+                document.getElementById('btn-submit-stage2').disabled = false;
+                showToast('Oseng Selesai!', 'Pengosengan wajan telah optimal.', 'success');
+            }
+        }
+
+        function submitStage2() {
+            const heat = document.getElementById('select-heat').value;
+            const oil = document.getElementById('select-oil').value;
+            const preheat = parseFloat(document.getElementById('select-preheat').value);
+            const osengTime = parseFloat(document.getElementById('select-osengtime').value);
+
+            if (heat === SOP.stoveHeat) state.score += 15;
+            else { state.score -= 5; state.sopErrors.push(`Posisi api salah (${heat}, seharusnya ${SOP.stoveHeat})`); }
+
+            if (oil === SOP.oil) state.score += 15;
+            else { state.score -= 5; state.sopErrors.push(`Minyak goreng salah (${oil}, seharusnya ${SOP.oil})`); }
+
+            if (preheat === SOP.preheatTime) state.score += 15;
+            else { state.score -= 5; state.sopErrors.push(`Preheat wajan salah (${preheat} mnt, seharusnya ${SOP.preheatTime} mnt)`); }
+
+            if (osengTime === SOP.osengTime) state.score += 15;
+            else { state.score -= 5; state.sopErrors.push(`Waktu oseng salah (${osengTime} mnt, seharusnya ${SOP.osengTime} mnt)`); }
+
+            playSFX('correct');
+            document.getElementById('hud-score').textContent = state.score;
+            renderStage3();
+        }
+
+        function renderStage3() {
+            updateStageTracker(3);
+            const container = document.getElementById('station-container');
+
+            container.innerHTML = `
+                <div class="w-full max-w-xl text-center space-y-6">
+                    <div>
+                        <span class="text-xs font-bold text-sky-400 tracking-wider uppercase">STASIUN 3: TESTER PORTIONING</span>
+                        <h3 class="text-xl font-bold text-white mt-1">Pembagian Porsi Cup Tester</h3>
+                        <p class="text-xs text-slate-400">Order Batch: <b class="text-amber-400">${state.batchSize} Box Nasi Goreng</b>. Berapa jumlah cup tester icip-icip yang disiapkan?</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <button onclick="selectTesterCup(4)" class="cup-opt option-card p-4 rounded-xl text-center">
+                            <div class="text-lg font-bold text-white">4 CUP</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Sub-porsi</div>
+                        </button>
+                        <button onclick="selectTesterCup(8)" class="cup-opt option-card p-4 rounded-xl text-center">
+                            <div class="text-lg font-bold text-white">8 CUP</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Standar 1 Box</div>
+                        </button>
+                        <button onclick="selectTesterCup(12)" class="cup-opt option-card p-4 rounded-xl text-center">
+                            <div class="text-lg font-bold text-white">12 CUP</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Sedang</div>
+                        </button>
+                        <button onclick="selectTesterCup(16)" class="cup-opt option-card p-4 rounded-xl text-center">
+                            <div class="text-lg font-bold text-white">16 CUP</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Standar 2 Box</div>
+                        </button>
+                    </div>
+
+                    <button id="btn-submit-stage3" onclick="submitStage3()" class="clean-btn w-full py-3 rounded-xl text-sm" disabled>
+                        LANJUT KE PENAWARAN PELANGGAN <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectTesterCup(val) {
+            playSFX('click');
+            state.stageData.testerCups = val;
+            document.querySelectorAll('.cup-opt').forEach(btn => {
+                const isMatch = btn.textContent.includes(`${val} CUP`);
+                btn.classList.toggle('selected', isMatch);
+            });
+            document.getElementById('btn-submit-stage3').disabled = false;
+        }
+
+        function submitStage3() {
+            const correctCups = SOP.testerCups(state.batchSize);
+            if (state.stageData.testerCups === correctCups) {
+                state.score += 25;
+            } else {
+                state.score -= 10;
+                state.sopErrors.push(`Jumlah cup tester (${state.batchSize} box) salah (${state.stageData.testerCups} cup, seharusnya ${correctCups} cup)`);
+            }
+            playSFX('correct');
+            document.getElementById('hud-score').textContent = state.score;
+            renderStage4();
+        }
+
+        function renderStage4() {
+            updateStageTracker(4);
+            const container = document.getElementById('station-container');
+            state.stageData.pitchSequence = [];
+
+            const shuffledOptions = [...SOP.pitchSteps].sort(() => Math.random() - 0.5);
+
+            container.innerHTML = `
+                <div class="w-full max-w-2xl text-center space-y-5">
+                    <div>
+                        <span class="text-xs font-bold text-sky-400 tracking-wider uppercase">STASIUN 4: CUSTOMER PITCHING</span>
+                        <h3 class="text-xl font-bold text-white mt-1">7-Langkah Standar Penawaran SOP</h3>
+                        <p class="text-xs text-slate-400">Klik frasa berikut secara <b>BERURUTAN DARI LANGKAH 1 HINGGA 7</b>!</p>
+                    </div>
+
+                    <!-- Selected Steps -->
+                    <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-left min-h-[90px]">
+                        <div class="text-[10px] text-slate-400 font-semibold mb-1 uppercase">Urutan Terpilih:</div>
+                        <ol id="selected-pitch-list" class="list-decimal pl-5 text-xs text-sky-300 space-y-1 font-medium">
+                            <!-- Injected selected items -->
+                        </ol>
+                    </div>
+
+                    <!-- Options Bank -->
+                    <div id="pitch-options-bank" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-left">
+                        ${shuffledOptions.map((opt) => `
+                            <button onclick="addPitchStep('${opt.replace(/'/g, "\\'")}', this)" class="option-card p-3 rounded-xl text-xs font-medium text-slate-200 hover:text-white flex items-center justify-between">
+                                <span>${opt}</span>
+                                <i class="fa-solid fa-plus text-sky-400 text-xs"></i>
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="resetPitchSequence()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-xl text-xs font-semibold border border-slate-700">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> RESET
+                        </button>
+                        <button id="btn-submit-stage4" onclick="submitStage4()" class="clean-btn flex-1 py-3 rounded-xl text-sm" disabled>
+                            FINALISASI MISI & EVALUASI <i class="fa-solid fa-check-circle ml-2 text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addPitchStep(stepText, btnEl) {
+            playSFX('click');
+            if (state.stageData.pitchSequence.length < 7) {
+                state.stageData.pitchSequence.push(stepText);
+                btnEl.disabled = true;
+                btnEl.style.opacity = '0.3';
+                updatePitchUI();
+            }
+        }
+
+        function resetPitchSequence() {
+            playSFX('click');
+            renderStage4();
+        }
+
+        function updatePitchUI() {
+            const listEl = document.getElementById('selected-pitch-list');
+            listEl.innerHTML = state.stageData.pitchSequence.map((step) => `
+                <li class="text-sky-300">${step}</li>
+            `).join('');
+
+            if (state.stageData.pitchSequence.length === 7) {
+                document.getElementById('btn-submit-stage4').disabled = false;
+            }
+        }
+
+        function submitStage4() {
+            let pitchScore = 0;
+            state.stageData.pitchSequence.forEach((step, idx) => {
+                if (step === SOP.pitchSteps[idx]) {
+                    pitchScore += 10;
+                } else {
+                    state.sopErrors.push(`Urutan Pitching #${idx+1} salah (${step}, seharusnya ${SOP.pitchSteps[idx]})`);
+                }
+            });
+
+            state.score += pitchScore;
+            document.getElementById('hud-score').textContent = state.score;
+            finishSimulation();
+        }
+
+        function finishSimulation() {
+            playSFX('correct');
+            showScreen('screen-result');
+
+            const maxScore = 175;
+            const accuracy = Math.max(0, Math.round((state.score / maxScore) * 100));
+
+            document.getElementById('res-score').textContent = state.score;
+            document.getElementById('res-accuracy').textContent = `${accuracy}%`;
+
+            const rankEl = document.getElementById('res-rank');
+            const titleEl = document.getElementById('result-title');
+            
+            if (accuracy >= 85) {
+                rankEl.textContent = 'MASTER CHEF';
+                rankEl.className = 'text-xs font-bold text-emerald-400 mt-2 truncate';
+                titleEl.textContent = 'EKSEKUSI SOP PERFECT!';
+            } else if (accuracy >= 60) {
+                rankEl.textContent = 'SENIOR CHEF';
+                rankEl.className = 'text-xs font-bold text-amber-400 mt-2 truncate';
+                titleEl.textContent = 'LULUS AMBANG SOP';
+            } else {
+                rankEl.textContent = 'TRAINEE CHEF';
+                rankEl.className = 'text-xs font-bold text-rose-400 mt-2 truncate';
+                titleEl.textContent = 'EVALUASI DIBUTUHKAN';
+            }
+
+            // Populate Detailed Feedback & Positive Reinforcement
+            const feedbackBox = document.getElementById('res-feedback-list');
+            if (state.sopErrors.length === 0) {
+                feedbackBox.innerHTML = `
+                    <div class="text-emerald-400 font-semibold text-center py-2">
+                        <i class="fa-solid fa-circle-check text-2xl mb-1 block"></i>
+                        LUAR BIASA! Seluruh langkah standar SOP Nasi Goreng HK dieksekusi dengan sempurna!
+                    </div>
+                `;
+            } else {
+                feedbackBox.innerHTML = `
+                    <div class="text-amber-400 font-semibold mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-clipboard-check"></i> EVALUASI SOP (${state.sopErrors.length} CATATAN):
+                    </div>
+                    <ul class="list-disc pl-4 space-y-1 text-slate-300 text-[11px]">
+                        ${state.sopErrors.map(err => `<li>${err}</li>`).join('')}
+                    </ul>
+                `;
+            }
+        }
+
+        // INITIALIZATION & EVENT LISTENERS
+        document.getElementById('btn-start-game').addEventListener('click', () => {
+            const name = document.getElementById('input-name').value.trim();
+            const nik = document.getElementById('input-nik').value.trim();
+
+            if (!name || !nik) {
+                showToast('Identitas Kosong', 'Harap isi Nama dan NIK terlebih dahulu!', 'error');
                 playSFX('wrong');
                 return;
             }
 
-            errorMsg.classList.add('hidden');
-            state.playerName = nameInput;
-            state.playerNIK = nikInput;
-            
-            document.getElementById('display-name').textContent = `${nameInput.toUpperCase()} [${nikInput}]`;
-            document.getElementById('player-info-display').classList.remove('hidden');
-
-            playSFX('startup');
-            
-            // Init audio if not already done via button
-            if(!state.audioEnabled) {
-                // Auto-enable logic might be blocked by browser without explicit interaction,
-                // but since they clicked "Start", it's a valid interaction context.
-                toggleAudio(); 
-            }
-
-            initGameUI();
-            switchScreen('game');
-            showToast('Link Established', 'Drag data fragments to empty slots.', 'info');
-        });
-
-        document.getElementById('btn-submit').addEventListener('click', () => {
-            if (Object.keys(state.userAnswers).length < state.totalQuestions) {
-                showToast('Incomplete', 'Please fill all empty slots before submitting.', 'error');
-                return;
-            }
-            submitProtocol();
+            state.playerName = name;
+            state.playerNIK = nik;
+            playSFX('click');
+            startGame();
         });
 
         document.getElementById('btn-restart').addEventListener('click', () => {
-            // Reset state
-            state.score = 0;
-            state.correctCount = 0;
-            state.userAnswers = {};
-            state.badges = { 1: false, 2: false, 3: false };
-            
-            // Reset UI
-            document.querySelectorAll('.badge').forEach(b => b.classList.remove('earned'));
-            
-            initGameUI();
-            switchScreen('game');
-            playSFX('startup');
+            playSFX('click');
+            startGame();
         });
 
-        document.getElementById('audio-toggle').addEventListener('click', toggleAudio);
-
+        document.getElementById('audio-btn').addEventListener('click', () => {
+            state.audioEnabled = !state.audioEnabled;
+            const btn = document.getElementById('audio-btn');
+            if (state.audioEnabled) {
+                btn.innerHTML = '<i class="fa-solid fa-volume-high text-sky-400"></i>';
+                initAudio();
+                playSFX('click');
+                showToast('Audio Aktif', 'Efek suara simulator diaktifkan.', 'info');
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-slate-400"></i>';
+            }
+        });
     </script>
 </body>
 </html>
