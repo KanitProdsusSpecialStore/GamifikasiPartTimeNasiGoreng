@@ -234,8 +234,8 @@
                         <input type="text" id="input-name" placeholder="Masukkan Nama Anda" class="w-full bg-slate-900/90 border border-slate-700 text-white rounded-lg px-4 py-3 text-sm focus:border-sky-500 focus:outline-none transition-colors">
                     </div>
                     <div>
-                        <label class="block text-left text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">N.I.K / ID Karyawan</label>
-                        <input type="text" id="input-nik" placeholder="Masukkan NIK Karyawan" class="w-full bg-slate-900/90 border border-slate-700 text-white rounded-lg px-4 py-3 text-sm focus:border-sky-500 focus:outline-none transition-colors">
+                        <label class="block text-left text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">Nomor Telepon</label>
+                        <input type="tel" id="input-nik" placeholder="Masukkan Nomor Telepon" class="w-full bg-slate-900/90 border border-slate-700 text-white rounded-lg px-4 py-3 text-sm focus:border-sky-500 focus:outline-none transition-colors">
                     </div>
                 </div>
 
@@ -899,7 +899,7 @@
             const nik = document.getElementById('input-nik').value.trim();
 
             if (!name || !nik) {
-                showToast('Identitas Kosong', 'Harap isi Nama dan NIK terlebih dahulu!', 'error');
+                showToast('Identitas Kosong', 'Harap isi Nama dan Nomor Telepon terlebih dahulu!', 'error');
                 playSFX('wrong');
                 return;
             }
